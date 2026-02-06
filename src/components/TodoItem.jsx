@@ -7,7 +7,12 @@ const TodoItem = (props) => {
         <div className="col-6">{todoName}</div>
         <div className="col-4">{todoDate}</div>
         <div className="col-2">
-          <button className="btn btn-danger kg-button">Delete</button>
+          <button
+            className="btn btn-danger kg-button"
+            onClick={() => props.onDeleteItem(todoName)}
+          >
+            Delete
+          </button>
         </div>
       </div>
     </div>

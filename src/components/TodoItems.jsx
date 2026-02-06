@@ -1,6 +1,6 @@
 import TodoItem from "./TodoItem";
 
-const TodoItems = ({ todoItems }) => {
+const TodoItems = ({ todoItems, onDeleteItem }) => {
   return (
     <div className="items-container">
       {todoItems.map((item) => {
@@ -9,6 +9,7 @@ const TodoItems = ({ todoItems }) => {
             key={Math.random()}
             todoName={item.name}
             todoDate={item.dueDate}
+            onDeleteItem={onDeleteItem}
           />
         );
       })}
