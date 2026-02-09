@@ -14,6 +14,10 @@ function App() {
       name: itemName,
       dueDate: itemDueDate,
     };
+    if (newItem.name === "" || newItem.dueDate === "") {
+      setTodoItems([]);
+      return;
+    }
     const newTodoItems = [...todoItems, newItem];
     setTodoItems(newTodoItems);
   };

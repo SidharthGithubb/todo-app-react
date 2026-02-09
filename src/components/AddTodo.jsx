@@ -1,50 +1,39 @@
-import { useState } from "react";
-
+import { useRef } from "react";
+import { BiAddToQueue } from "react-icons/bi";
 const AddTodo = ({ onNewItem }) => {
-  const [todoName, setTodoName] = useState("");
-  const [todoDueDate, setTodoDueDate] = useState("");
+  const todoNameElement = useRef();
+  const dueDateElement = useRef();
 
-  const handleNameChange = (event) => {
-    setTodoName(event.target.value);
-  };
-
-  const handleDueDateChange = (event) => {
-    setTodoDueDate(event.target.value);
-  };
-
-  const handleAddClick = () => {
-    onNewItem(todoName, todoDueDate);
-    setTodoName("");
-    setTodoDueDate("");
+  const handleAddClick = (event) => {
+    event.preventDefault();
+    const todoName = todoNameElement.current.value;
+    const dueDate = dueDateElement.current.value;
+    onNewItem(todoName, dueDate);
+    todoNameElement.current.value = "";
+    dueDateElement.current.value = "";
   };
   return (
     <div className="container text-center">
-      <div className="row kg-row">
-        <div className="col-6">
-          <input
-            type="text"
-            value={todoName}
-            placeholder="Add your todo here"
-            onChange={handleNameChange}
-          />
+      <form action="" onSubmit={handleAddClick}>
+        <div className="row kg-row">
+          <div className="col-6">
+            <input
+              type="text"
+              ref={todoNameElement}
+              placeholder="Add your todo here"
+              required
+            />
+          </div>
+          <div className="col-4">
+            <input type="date" ref={dueDateElement} required />
+          </div>
+          <div className="col-2">
+            <button type="submit" className="btn btn-success kg-button">
+              <BiAddToQueue />
+            </button>
+          </div>
         </div>
-        <div className="col-4">
-          <input
-            type="date"
-            value={todoDueDate}
-            onChange={handleDueDateChange}
-            required
-          />
-        </div>
-        <div className="col-2">
-          <button
-            className="btn btn-success kg-button"
-            onClick={handleAddClick}
-          >
-            Add
-          </button>
-        </div>
-      </div>
+      </form>
     </div>
   );
 };
