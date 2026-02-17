@@ -1,10 +1,10 @@
 import AddTodo from "./components/AddTodo";
 import AppName from "./components/AppName";
-import TodoItem from "./components/TodoItem";
 import "./App.css";
 import TodoItems from "./components/todoItems";
 import ErrorComponent from "./components/ErrorComponent";
 import { useState } from "react";
+import { TodoItemStore } from "./store/todo-items-store";
 function App() {
   const [todoItems, setTodoItems] = useState([]);
   const msg = "No items to display";
@@ -18,8 +18,8 @@ function App() {
       setTodoItems([]);
       return;
     }
-    const newTodoItems = [...todoItems, newItem];
-    setTodoItems(newTodoItems);
+
+    setTodoItems((todoItems) => [...todoItems, newItem]);
   };
 
   const handleDeleteItem = (itemName) => {
@@ -31,12 +31,20 @@ function App() {
 
   return (
     <>
-      <center className="todo-container">
-        <AppName />
-        <AddTodo onNewItem={handleNewItem} />
-        {todoItems.length === 0 && <ErrorComponent message={msg} />}
-        <TodoItems todoItems={todoItems} onDeleteItem={handleDeleteItem} />
-      </center>
+      <TodoItemStore.Provider
+        value={{
+          todoItems: todoItems,
+          addNewItem: handleNewItem,
+          deleteItem: handleDeleteItem,
+        }}
+      >
+        <center className="todo-container">
+          <AppName />
+          <AddTodo />
+          <ErrorComponent message={msg} />
+          <TodoItems />
+        </center>
+      </TodoItemStore.Provider>
     </>
   );
 }

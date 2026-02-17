@@ -1,6 +1,8 @@
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-const AddTodo = ({ onNewItem }) => {
+import { TodoItemStore } from "../store/todo-items-store";
+const AddTodo = () => {
+  const { addNewItem } = useContext(TodoItemStore);
   const todoNameElement = useRef();
   const dueDateElement = useRef();
 
@@ -8,7 +10,7 @@ const AddTodo = ({ onNewItem }) => {
     event.preventDefault();
     const todoName = todoNameElement.current.value;
     const dueDate = dueDateElement.current.value;
-    onNewItem(todoName, dueDate);
+    addNewItem(todoName, dueDate);
     todoNameElement.current.value = "";
     dueDateElement.current.value = "";
   };

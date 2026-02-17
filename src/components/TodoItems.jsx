@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import TodoItem from "./TodoItem";
+import { TodoItemStore } from "../store/todo-items-store";
 
-const TodoItems = ({ todoItems, onDeleteItem }) => {
+const TodoItems = () => {
+  const { todoItems, deleteItem } = useContext(TodoItemStore);
   return (
     <div className="items-container">
       {todoItems.map((item) => {
@@ -9,7 +12,7 @@ const TodoItems = ({ todoItems, onDeleteItem }) => {
             key={Math.random()}
             todoName={item.name}
             todoDate={item.dueDate}
-            onDeleteItem={onDeleteItem}
+            onDeleteItem={deleteItem}
           />
         );
       })}
