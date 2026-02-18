@@ -12,7 +12,6 @@ const TodoItems = () => {
             key={Math.random()}
             todoName={item.name}
             todoDate={item.dueDate}
-            onDeleteItem={deleteItem}
           />
         );
       })}
