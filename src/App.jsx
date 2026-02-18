@@ -3,30 +3,52 @@ import AppName from "./components/AppName";
 import "./App.css";
 import TodoItems from "./components/todoItems";
 import ErrorComponent from "./components/ErrorComponent";
-import { useState } from "react";
+import { useState, useReducer } from "react";
 import { TodoItemStore } from "./store/todo-items-store";
+
+function todoItemStateChange(currentTodoItems, action) {
+  let newTodoItems = [];
+  if (action.type === "NEW_ITEM") {
+    newTodoItems = [
+      ...currentTodoItems,
+      { name: action.payload.itemName, dueDate: action.payload.itemDueDate },
+    ];
+
+    return newTodoItems;
+  } else if (action.type === "DELETE_ITEM") {
+    newTodoItems = currentTodoItems.filter((item) => {
+      return item.name !== action.payload.itemName;
+    });
+
+    return newTodoItems;
+  } else {
+    return [];
+  }
+}
+
 function App() {
-  const [todoItems, setTodoItems] = useState([]);
-  const msg = "No items to display";
-
-  const handleNewItem = (itemName, itemDueDate) => {
+  const [todoItems, dispatchTodoItems] = useReducer(todoItemStateChange, []);
+  const addNewItem = (itemName, itemDueDate) => {
     const newItem = {
-      name: itemName,
-      dueDate: itemDueDate,
+      type: "NEW_ITEM",
+      payload: {
+        itemName: itemName,
+        itemDueDate: itemDueDate,
+      },
     };
-    if (newItem.name === "" || newItem.dueDate === "") {
-      setTodoItems([]);
-      return;
-    }
 
-    setTodoItems((todoItems) => [...todoItems, newItem]);
+    dispatchTodoItems(newItem);
   };
 
-  const handleDeleteItem = (itemName) => {
-    const updatedItems = todoItems.filter((item) => {
-      return item.name !== itemName;
-    });
-    setTodoItems(updatedItems);
+  const deleteItem = (itemName) => {
+    const newItem = {
+      type: "DELETE_ITEM",
+      payload: {
+        itemName: itemName,
+      },
+    };
+
+    dispatchTodoItems(newItem);
   };
 
   return (
@@ -34,14 +56,14 @@ function App() {
       <TodoItemStore.Provider
         value={{
           todoItems: todoItems,
-          addNewItem: handleNewItem,
-          deleteItem: handleDeleteItem,
+          addNewItem: addNewItem,
+          deleteItem: deleteItem,
         }}
       >
         <center className="todo-container">
           <AppName />
           <AddTodo />
-          <ErrorComponent message={msg} />
+          <ErrorComponent />
           <TodoItems />
         </center>
       </TodoItemStore.Provider>
